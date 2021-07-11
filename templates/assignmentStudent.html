@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/498afb2bde.js" crossorigin="anonymous"></script>
+    <!-- text -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+    <!-- EXTERNAL CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/assignmentStudent.css') }}">
+</head>
+
+<body>
+    <h1>Assignments</h1>
+    <div class="assignment">
+        <div class="head">
+                <h1>{{ details["title"]}}</h1>
+                <span class="post-date"><strong>Date Posted:</strong> {{ details["postedDate"].strftime('%d/%m/%Y') }}</span>
+                <span class="submision-date"><strong>Due Date:</strong> {{ details["dueDate"].strftime('%d/%m/%Y') }}</span>
+                <hr>
+        </div>
+        <p>{{ details["discription"]}}</p>
+        <form action="{{url_for('ansToAssignment')}}" method="post">
+            <input type="hidden" name="assignmentId" value="{{ details["_id"] }}">
+            <textarea name="ans" id="" cols="30" rows="5" placeholder="Enter the answer here..." required></textarea><br>
+            <input type="file" name="ansFile" id=""><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+
+</html>

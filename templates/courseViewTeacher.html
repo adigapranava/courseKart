@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/498afb2bde.js" crossorigin="anonymous"></script>
+    <!-- text -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+    <!-- EXTERNAL CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/courseViewTeacher.css') }}">
+</head>
+
+<header>
+    <div class="text">
+        <h1>Hello!<br></h1>
+        <h4>Start Exploring your Intrest</h4>
+    </div>
+    <div class="search-bar">
+        <form action="">
+            <label for="search"><i class="fa fa-search"></i></label>
+            <input type="text" id="search" placeholder="Course Name">
+        </form>
+    </div>
+    <!-- <div class="login">
+        <div class="blu-btn">Login</div>
+    </div> -->
+    <div class="login">
+        <div class="blu-btn right">Pranava</div>
+    </div>
+</header>
+
+<body>
+    <div class="infos">
+        <div class="course-title">
+            <h1>
+                {{courseDetails[0]["courseName"] }}
+            </h1>
+            <p>
+                {{courseDetails[0]["discription"] }}
+            </p>
+            <h5 class="duration">
+                {{courseDetails[0]["duration"] }}-months course
+            </h5>
+            <h5 class="total-assignment">
+                {{courseDetails[0]["assignments"]| length }} assignments
+            </h5>
+            <span class="blu-btn enroll" onclick="showStudents()">{{ students | length }} Enroles</span>
+        </div>
+        <div class="abt-teacher">
+            <h2>Course offered by</h2>
+            <div class="short-info">
+                {% if courseDetails[0]["teacherId"][0]["gender"] %}
+                <img src="{{ url_for('static',filename='images/sir.png') }}" alt="" srcset=""> {% else %}
+                <img src="{{ url_for('static',filename='images/maam.png') }}" alt="" srcset=""> {% endif %}
+                <h1>{{ courseDetails[0]["teacherId"][0]["teacherName"] }}</h1>
+                <h5 class="stars">{{ courseDetails[0]["teacherId"][0]["ratings"] }} stars</h5>
+                <h4 class="position">{{ courseDetails[0]["teacherId"][0]["graduation"] }}</h4>
+            </div>
+            <div class="more-info">
+                <p>
+                    <strong>Discription:</strong> {{ courseDetails[0]["teacherId"][0]["discription"] }}
+                </p>
+                <h3>Graduation</h3>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+                <p>
+                    <Strong>Some popular course:</Strong> {% for otherCourse in otherCourses %}
+                    <a style="color: blue" href="{{ url_for('courseDetails' ,courseId=otherCourse['_id']) }}">{{ otherCourse["courseName"]}}</a> , {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="notes-assignments">
+        <div class="anouncements">
+            <div class="anouncements-header">
+                <h2>Notes / Announcements</h2>
+                <div class="blu-btn" onclick="createNotes()">Add </div>
+            </div>
+            <hr>
+            <div class="all-announcements" id="all-announcements">
+                <!-- <div class="announcement">
+                    <div class="announcement-head">
+                        <h2>You guys will have test tomorrow</h3>
+                            <span>10/03/2021</span>
+                    </div>
+                    <p class="annu-disc">As you guys copied in cie2 ill conduct quiz for individual</p>
+                </div> -->
+            </div>
+        </div>
+        <div class="assignment">
+            <div class="assignment-headder">
+                <h2>Assignments</h2>
+                <div class="blu-btn" onclick="createAssignment()">Add </div>
+            </div>
+            <hr>
+            <div class="all-announcements" id="all-assignment">
+                {% for assignment in assignments %}
+                    <div class="announcement">
+                        <a href="{{ url_for('assignmentDetails' ,assignmentId=assignment['_id']) }}" target="_blank">
+                            <div class="announcement-head">
+                                <h2>{{ assignment["title"] }}</h3>
+                                    <span>{{ assignment["postedDate"].strftime('%d/%m/%Y') }}</span>
+                            </div>
+                            <p class="annu-disc">{{ assignment["discription"] }}</p>
+                        </a>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+
+        <!-- Full notifications  -->
+        <!-- <div class="fullnotification">
+        <div class="noti-part">
+            <i class="fas fa-times close"></i>
+            <h1>hello</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste voluptatum voluptate corrupti hic, excepturi maiores, magni ullam minus aspernatur, ut nesciunt quis omnis. Eveniet veniam provident incidunt perferendis laudantium temporibus!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem sapiente facere laborum quasi corrupti dignissimos voluptate officiis, tempora qui commodi dolorum ipsam deleniti sunt aut omnis saepe, obcaecati eaque nulla. Lorem, ipsum dolor
+                sit amet consectetur adipisicing elit. Fugit tempore sit eum animi molestiae ea itaque, dignissimos qui. Ipsam eos, rem vero ullam soluta facilis sequi incidunt enim debitis quae. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptas minus architecto, aspernatur doloribus facilis velit molestias aliquam ipsam vel corporis quia dolores voluptatum. Nulla aspernatur, error odio quam repudiandae dolore! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Sed accusamus quis asperiores obcaecati aperiam quae eum totam cumque reiciendis aliquam, quibusdam doloremque quos veniam! Quo vel vitae enim! Beatae, modi?
+            </p>
+            <form action="" method="post">
+                <input type="hidden" name="">
+                <button type="submit">Edit</button>
+            </form>
+        </div>
+    </div> -->
+
+        <!-- creating notes -->
+        <div class="create-notes">
+            <div class="noti-part">
+                <i class="fas fa-times close" onclick="cancelNotes()"></i>
+                <form action="{{url_for('addNotes')}}" method="post">
+                    <input type="hidden" name="courseId" value="{{ courseDetails[0]['_id'] }}">
+                    <label for="ass-titl">Title</label><br>
+                    <input type="text" name="ass-titl" id="ass-titl" required>
+                    <br><label for="ass-body">Discription</label><br>
+                    <textarea name="ass-body" id="ass-body" cols="35" rows="10" required></textarea>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+
+        <!-- creating Assignments -->
+        <div class="create-assignment">
+            <div class="noti-part">
+                <i class="fas fa-times close" onclick="cancelAssignment()"></i>
+                <form action="{{url_for('addAssignment')}}" method="post">
+                    <input type="hidden" name="courseId" value="{{ courseDetails[0]['_id'] }}">
+                    <label for="ass-titl">Title</label><br>
+                    <input type="text" name="ass-titl" id="ass-titl" required>
+                    <br><label for="ass-body">Discription</label><br>
+                    <textarea name="ass-body" id="ass-body" cols="35" rows="10" required></textarea>
+                    <br><label for="ass-due">Due Date</label><br>
+                    <input type="date" name="ass-due" id="ass-due" required>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+
+        <!-- All students infos -->
+        <div class="studentsInfos">
+            <div class="noti-part">
+                <i class="fas fa-times close" onclick="cancelStudents()"></i>
+                <div class="students">
+                    {% if students: %}
+                        {% for student in students %}
+                            <div class="student">
+                                {% if student["gender"] %}
+                                    <img src="{{ url_for('static',filename='images/boy.png') }}" alt="" srcset="">
+                                {% else %}
+                                    <img src="{{ url_for('static',filename='images/girl.png') }}" alt="" srcset="">
+                                {% endif %}
+                                <h5>{{ student["name"] }}</h5>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <h2>No students enrolled yet :( &nbsp;</h2>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+</body>
+<script>
+    var announcements = {{ notes | safe }};
+    console.log("hai");
+    console.log(announcements);
+</script>
+<script src="{{ url_for('static',filename='scripts/courseViewTeacher.js') }}"></script>
+
+</html>

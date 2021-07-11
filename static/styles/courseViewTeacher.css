@@ -1,0 +1,326 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Baloo Tammudu 2', cursive;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #333;
+    text-decoration: none;
+}
+
+::-webkit-scrollbar {
+    cursor: pointer;
+    width: 8px;
+}
+
+ ::-webkit-scrollbar-track {
+    background-color: rgb(151, 151, 151);
+    border-radius: 50px;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: #353535;
+    border-radius: 50px;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: rgb(75, 75, 75);
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+header {
+    background: #ffff;
+    padding: 1rem;
+    display: flex;
+    box-shadow: 0px 0px 10px 2px #333;
+}
+
+header .text h1 {
+    color: #fa3159;
+    font-size: 40px;
+}
+
+header .text h4 {
+    font-size: 15px;
+}
+
+header .search-bar form {
+    position: relative;
+    float: left;
+    font-size: 20px;
+    border: #333 1px solid;
+    color: #333;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+header .search-bar input,
+header .search-bar input:focus {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    float: left;
+    background: none;
+}
+
+.blu-btn {
+    background-color: #3181fa;
+    color: #f5f5f5;
+    font-weight: 900;
+    border-radius: 3px;
+    padding: 0.5rem;
+    width: 100px;
+    text-align: center;
+    border: 1px #333 solid;
+    margin: 5px;
+}
+
+.right {
+    position: absolute;
+    right: 1rem;
+}
+
+.infos {
+    display: flex;
+    width: 98vw;
+}
+
+.course-title {
+    margin: 1rem 0.5rem;
+    width: 50%;
+    border-radius: 5px;
+    padding: 2rem;
+    background: #ffff;
+    box-shadow: 0px 0px 10px 2px #333;
+}
+
+.course-title h1 {
+    color: #3181fa;
+    font-size: 3rem;
+    font-weight: 900;
+    text-shadow: 2px 1px 1px rgb(49, 48, 48);
+}
+
+.course-title p {
+    padding-top: 1rem;
+    text-align: justify;
+}
+
+.course-title h5 {
+    padding: 10px;
+}
+
+.enroll {
+    width: 300px;
+    position: relative;
+    top: 20px;
+    text-decoration: none;
+}
+
+.abt-teacher {
+    width: 45%;
+    text-align: center;
+    margin: 1rem 0.5rem;
+    border-radius: 5px;
+    padding: 2rem;
+    background: #ffff;
+    box-shadow: 0px 0px 10px 2px #333;
+}
+
+.short-info img {
+    width: 100px;
+}
+
+.short-info .stars {
+    font-size: 15px;
+    color: #fa3159;
+}
+
+.short-info .position {
+    font-size: 12px;
+}
+
+.more-info p {
+    text-align: justify;
+}
+
+.notes-assignments {
+    display: flex;
+}
+
+.anouncements {
+    margin: 1rem 0.5rem;
+    width: 50%;
+    border-radius: 5px;
+    padding: 2rem;
+    background: #ffff;
+    box-shadow: 0px 0px 10px 2px #333;
+}
+
+.assignment {
+    margin: 1rem 0.5rem;
+    width: 45%;
+    border-radius: 5px;
+    padding: 2rem;
+    background: #ffff;
+    box-shadow: 0px 0px 10px 2px #333;
+}
+
+.all-announcements {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.announcement {
+    padding: 15px;
+    margin: 5px;
+    background-color: #efefef;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.announcement .announcement-head {
+    position: relative;
+}
+
+.announcement .announcement-head h2 {
+    color: #333;
+}
+
+.announcement .annu-disc {
+    font-size: 15px;
+    white-space: nowrap;
+    height: 25px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #393939;
+}
+
+.announcement .announcement-head span {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 900;
+    bottom: 1px;
+    right: 0.4rem;
+}
+
+.studentsInfos,
+.fullnotification,
+.create-assignment,
+.create-notes {
+    position: fixed;
+    background-color: #1a1a1af3;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.noti-part {
+    background-color: #f1f1f1;
+    padding: 2rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.noti-part p {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.fullnotification form button {
+    background-color: #3181fa;
+    color: #f5f5f5;
+    font-size: 15px;
+    border: #0468fd;
+    outline: none;
+    padding: 3px 10px;
+    position: absolute;
+    right: 30px;
+    font-weight: 900;
+}
+
+.create-notes #ass-titl,
+.create-assignment #ass-titl {
+    outline: none;
+    font-size: large;
+    font-weight: 900;
+}
+
+.close {
+    position: absolute;
+    right: 2rem;
+    top: 1rem;
+    font-size: 30px;
+}
+
+.studentsInfos,
+.create-notes,
+.create-assignment {
+    display: none;
+}
+
+.create-assignment input[type=submit],
+.create-notes input[type=submit] {
+    background-color: #3181fa;
+    color: #f5f5f5;
+    font-size: 20px;
+    border: #0468fd;
+    outline: none;
+    padding: 3px 10px;
+    font-weight: 900;
+}
+
+
+/* students view */
+
+.students {
+    margin-top: 20px;
+    max-height: 90vh;
+    overflow-y: scroll;
+}
+
+.student {
+    margin-top: 10px;
+    position: relative;
+    display: flex;
+    min-width: 350px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.student img {
+    height: 60px;
+}
+
+.student h5 {
+    line-height: 60px;
+    padding-left: 20px;
+    font-size: 20px;
+}
+
+@media screen and (max-width: 992px) {
+    .infos {
+        display: block;
+        width: 100vw;
+    }
+    .course-title {
+        width: 98%;
+    }
+    .abt-teacher {
+        width: 98%;
+    }
+    .notes-assignments {
+        display: block;
+    }
+    .anouncements,
+    .assignment {
+        width: 91%;
+    }
+}
