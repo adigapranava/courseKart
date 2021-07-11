@@ -5,18 +5,115 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/base.css') }}">
+    <!--Google font API-->
+    <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+    <!--fontawosome icon-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <!--JQUERY get method -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='images/logoDark.png') }}" type="image/x-icon">
+    {% block title %}
+    {% endblock %}
 </head>
 
 <body>
-    {% if allCourses%} 
-        {% for item in allCourses %}
-            <h1>{{item["courseName"]}}</h1>
-            <p>{{item["discription"]}}</p>
-            <h5>{{item["teacherId"]}}</h5>
-            <hr>
-        {% endfor %} 
-    {% endif %}
+    <!--NAV BAR-->
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+          <i class="fa fa-bars"></i>
+        </label>
+        <label class="logo">
+            <a href="{{url_for('home')}}" style="color: aliceblue;">
+                <img src="{{ url_for('static',filename='images/logoDark.png') }}" alt="logo" style="position: relative; top: -10px; height: 75px;">
+            </a>
+        </label>
+        <ul class="list">
+            <li class="ls"><a class="active" href="{{url_for('home')}}">Home</a></li>
+            <li class="ls noti-li">
+                <a href="">Assignments</a>
+                <p id="noti-count">0</p>
+            </li>
+            <!-- iff loged in -->
+            {% if session["id"] %}
+                <li class="ls"><a href="">Profile</a></li>
+                <li class="ls"><a href="{{url_for('logout')}}">Logout</a></li>
+            {% else %}
+            <!--  else -->
+                <li class="ls"><a href="{{url_for('login')}}">sign-in</a></li>
+            {% endif %}
+
+            
+        </ul>
+    </nav>
+
+    <!-- body -->
+    <div class="block">
+        {% block content %} 
+        
+        {% endblock %}
+    </div>
+
+    <!-- <div class="rigistered-courses">
+
+        <a href="#" class="course">
+            <div class="">
+                <div class="course-detl">
+                    Data Base Management System
+                </div>
+                <div class="bottom">
+                    <hr>
+                    <div class="teacher">
+                        Roopa R
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="#" class="course">
+            <div class="">
+                <div class="course-detl">
+                    Programming in C++
+                </div>
+                <div class="bottom">
+                    <hr>
+                    <div class="teacher">
+                        Nalina V
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="#" class="course">
+            <div class="">
+                <div class="course-detl">
+                    Web Development using React
+                </div>
+                <div class="bottom">
+                    <hr>
+                    <div class="teacher">
+                        Nalina V
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="#" class="course">
+            <div class="">
+                <div class="course-detl">
+                    Kali Linux
+                </div>
+                <div class="bottom">
+                    <hr>
+                    <div class="teacher">
+                        Nalina V
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div> -->
+
+    <!-- footer -->
+
 </body>
 
 </html>

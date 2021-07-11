@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Assignment</title>
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
     <!-- EXTERNAL CSS -->
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/assignmentTeacher.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static',filename='images/logoDark.png') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -37,9 +38,9 @@
         <div class="students">
             <div class="submitted-students">
                 <h2>Submited By</h2>
-                {% set k = 0 %}
+                {% set k = namespace(value=0) %}
                 {% for  submitedStudent in details["studentInfo"] %}
-                    <a href="#ass{{k}}" class="student">
+                    <a href="#ass{{k.value}}" class="student">
                         {% if submitedStudent["gender"] %}
                             <img src="{{ url_for('static',filename='images/boy.png') }}" alt="" srcset="">
                         {% else %}
@@ -47,31 +48,31 @@
                         {% endif %}
                         <h5>{{ submitedStudent["name"]}}</h5>
                     </a>
-                    {% set  k= k+ 1 %}
+                    {% set k.value = k.value + 1 %}
                 {% endfor %}
             </div>
 
             
             <div class="answers">
-                {% set k =0 %}
+                {% set k = namespace(value=0) %}
                 {% for answer in details["answers"] %}
                     {% if answer["submitedDate"] >= details["dueDate"]%}
-                    <div class="ans late" id="ass{{k}}">
+                        <div class="ans late" id="ass{{k.value}}">
                     {% else %}
-                    <div class="ans" id="ass{{k}}">
+                        <div class="ans" id="ass{{k.value}}">
                     {% endif %}
                         <div class="ansBy">
-                            {% if details["studentInfo"][k]["gender"] %}
+                            {% if details["studentInfo"][k.value]["gender"] :%}
                                 <img src="{{ url_for('static',filename='images/boy.png') }}" alt="" srcset="">
                             {% else %}
                                 <img src="{{ url_for('static',filename='images/girl.png') }}" alt="" srcset="">
                             {% endif %}
-                            <h5>{{ details["studentInfo"][k]["name"] }}</h5>
+                            <h5>{{ details["studentInfo"][k.value]["name"] }}</h5>
                         </div>
-                        <span class="post-date"><strong>Date Posted:</strong> 12-06-2021</span>
+                        <span class="post-date"><strong>Date Posted:</strong>{{ answer["submitedDate"].strftime('%d/%m/%Y') }}</span>
                         <hr>
                         <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos tenetur necessitatibus incidunt distinctio reprehenderit sequi molestias maxime velit dolore debitis veniam, consequuntur labore quaerat eum fugiat similique voluptas porro itaque.
+                            {{answer["answer"]}}
                         </p>
                         <form action="" method="post">
                             <input type="hidden" name="answer-no" value="">
@@ -79,7 +80,7 @@
                             <input type="submit" value="Submit">
                         </form>
                     </div>
-                    {% set k= k+1 %}
+                    {% set k.value = k.value + 1 %}
                 {% endfor %}
             </div>
         </div>

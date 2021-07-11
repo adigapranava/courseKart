@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>courseKart</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/register.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="profile-block">
+        <h1>Student Registration</h1>
+        <hr/>
+        <form method="POST" action="{{url_for('registerStudent') }}" enctype="multipart/form-data">
+            <div class="profile-items">
+                <p>Full Name</p>
+                <input type="text" name="name" id="full-title" value="" required>
+                <p>DOB</p>
+                <input type="date" name="dob" id="dob" value="" required>
+                <p>Gender</p>
+                <div style="display: flex">
+                    <input type="radio" name="gender" id="who1" value="male" required>
+                    <label for="who1" style="position: relative;right: 90px; font-size:20px;">Male</label>
+                    <input type="radio" name="gender" id="who2" value="female" required style="position: relative;right: 90px;">
+                    <label for="who2" style="position: relative;right: 160px; font-size:20px;">Female</label>
+                </div>
+                <p>Email</p>
+                <input type="text" name="email" value="" id="email" required>
+                <p>Password</p>
+                <input type="password" name="password1" id="phoneno" value="" required>
+                <p>Confirm Password</p>
+                <input type="password" name="password2" id="phoneno" value="" required>
+                <br>
+                <h5 style="color: rgb(252, 110, 15);font-size: 18px;" id="error_text">{{error}}</h5>
+                <br>
+                already have an account?
+                <a href="{{url_for('login') }}">Login</a>
+                <br>
+                Are you a teacher?
+                <a href="{{url_for('registerTeacher') }}">Register as a Teacher</a>
+                <div class="btns">
+                    <input type="submit" value="Submit">
+                </div>
+                
+            </div>
+        </form>
+    </div>
+{% endblock %}

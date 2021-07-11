@@ -1,27 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}
+    <title>courseKart</title>
+    <style>
+        .inputbox {
+            width: 80vw;
+            max-width: 500px;
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            padding: 30px;
+            background-image: linear-gradient(45deg, rgb(33, 7, 33), rgb(13, 3, 16));
+            border-radius: 5px;
+            transform: translate(-50%, -50%);
+            color: white;
+        }
+        
+        .inputbox h2 {
+            font-size: 40px;
+            padding-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid rgb(187, 174, 133);
+            margin-bottom: 20px;
+        }
+        
+        .textbox {
+            width: 95%;
+            overflow: hidden;
+            font-size: 30px;
+            padding: 10px 0;
+            margin: 20px 0;
+        }
+        
+        .textbox input {
+            border: none;
+            outline: none;
+            background: none;
+            color: white;
+            font-size: 20px;
+            width: 100%;
+            float: left;
+            margin: 0 10px;
+            letter-spacing: 2px;
+            border-bottom: 2px solid rgb(247, 243, 243);
+            padding-bottom: 10px;
+        }
+        
+        .textbox input:focus {
+            transition: 0.5s;
+            border-bottom: 2px solid rgb(187, 255, 0);
+        }
+        
+        .textbox input::placeholder {
+            color: rgb(212, 212, 171);
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+        
+        input[type='submit'] {
+            width: 150px;
+            position: relative;
+            font-size: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px;
+            background: none;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            color: rgb(212, 236, 241);
+            background: rgb(2, 3, 5);
+            cursor: pointer;
+            margin: 12px 0;
+            text-transform: capitalize;
+        }
+        
+        .inputbox .relative a {
+            padding-left: 10px;
+            color: darkturquoise;
+            text-transform: lowercase;
+        }
+    </style>
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    teacher
-    <form action="{{url_for('loginTeacher')}}" method="post">
-        <input type="text" placeholder="email" name="email" required>
-        <input type="password" placeholder="password" name="pass" required>
-        <input type="submit">
+{% block content %}
+    <form method="POST" action="{{url_for('login')}}" name="loginForm" onsubmit="return(validate());">
+        <div class="inputbox">
+            <h2>Login</h2>
+            <div class="who" style="color: #dfdfdf; font-size:24px;">
+                &nbsp; &nbsp;
+                <input type="radio" name="who" id="who1" value="student" required>
+                <label for="who1">Student</label> &nbsp;&nbsp;
+                <input type="radio" name="who" id="who2" value="teacher" required>
+                <label for="who2">Teacher</label>
+            </div>
+            <div class="textbox">
+                <input type="email" placeholder="E-mail" name="email" required="">
+            </div>
+            <div class="textbox">
+                <input type="password" placeholder="Password" name="pass" required="">
+            </div>
+                <h5 style="color: rgb(252, 110, 15);font-size: 18px;" id="error_text">{{error}}</h5>
+                <input class="btn" type="submit" name="" value="Sign in"></a>
+            <div class="relative"><b>Not Registered? </b>
+                <a href="{{url_for('registerStudent') }}" target="_self">SIGN UP</a> </div>
+        </div>
     </form>
-    student
-    <form action="{{url_for('loginStudent')}}" method="post">
-        <input type="text" placeholder="email" name="email" required>
-        <input type="password" placeholder="password" name="pass" required>
-        <input type="submit">
-    </form>
-    <h2 style="color: red;">{{error}}</h2>
-</body>
-
-</html>
+{% endblock %}

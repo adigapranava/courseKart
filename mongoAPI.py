@@ -310,7 +310,22 @@ def checkIfAnswered(answeredBy, assId):
                 "answers.answeredBy": {"$in": [ObjectId(answeredBy)]}
     })
     answers = list(results)
+    # print(answers)
     return len(answers)> 0
+
+def getAnswer(answeredBy, assId):
+    results = collAssignment.find({
+                "_id": ObjectId(assId),
+                "answers.answeredBy": {"$in": [ObjectId(answeredBy)]}
+            },{
+                "answers": {"$elemMatch": {"answeredBy": ObjectId(answeredBy)}}
+            })
+    answers = list(results)
+    # print(answers)
+    if len(answers)> 0:
+        return answers
+    else:
+        return False
 
 def checkIfAssignmentExit(courseId, assId):
     results = collCourse.find({
@@ -565,4 +580,5 @@ if __name__=="__main__":
     # print(getRelatedCourse("60ced6d475025b75ea97b244"))
     # getCourseIdOfAssignment("60d71042c55fe1b8a8c780d7")
     # print(ansToAssignment("60cf3ed5c8f9ccd0ab113ac7","60d01576780e9ccb770b1200","60d72ed33e42f33bbefbc112", "Test Ans"))
-    print(getAssignmentInfoForStudent("60d72ed33e42f33bbefbc112"))
+    # print(getAssignmentInfoForStudent("60d72ed33e42f33bbefbc112"))
+    # getAnswer("60eacce25bb948228b253809", "60eacd395bb948228b25380a")

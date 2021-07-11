@@ -1,39 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://kit.fontawesome.com/498afb2bde.js" crossorigin="anonymous"></script>
-    <!-- text -->
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
-    <!-- EXTERNAL CSS -->
+{% extends "base.html" %}
+{% block title %}
+    <title>courseKart</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/courseViewTeacher.css') }}">
-</head>
+{% endblock %}
 
-<header>
-    <div class="text">
-        <h1>Hello!<br></h1>
-        <h4>Start Exploring your Intrest</h4>
-    </div>
-    <div class="search-bar">
-        <form action="">
-            <label for="search"><i class="fa fa-search"></i></label>
-            <input type="text" id="search" placeholder="Course Name">
-        </form>
-    </div>
-    <!-- <div class="login">
-        <div class="blu-btn">Login</div>
-    </div> -->
-    <div class="login">
-        <div class="blu-btn right">Pranava</div>
-    </div>
-</header>
-
-<body>
+{% block content %}
     <div class="infos">
         <div class="course-title">
             <h1>
@@ -187,12 +158,11 @@
                 </div>
             </div>
         </div>
-</body>
-<script>
-    var announcements = {{ notes | safe }};
-    console.log("hai");
-    console.log(announcements);
-</script>
-<script src="{{ url_for('static',filename='scripts/courseViewTeacher.js') }}"></script>
-
-</html>
+    </body>
+    <script>
+        var announcements = {{ notes | safe }};
+        console.log("hai");
+        console.log(announcements);
+    </script>
+    <script src="{{ url_for('static',filename='scripts/courseViewTeacher.js') }}"></script>
+{% endblock %}

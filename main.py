@@ -37,49 +37,117 @@ def home():
     return "true"
 
 
-@app.route('/loginTeacher', methods = ['POST', 'GET'])
-def loginTeacher():
+@app.route('/login', methods = ['POST', 'GET'])
+def login():
     if request.method == 'POST':
         email = request.form["email"]
         password = request.form["pass"]
-        res = mongoAPI.authenticateTeacher(emailId=email,
+        who = request.form["who"]
+        if(who == "teacher" ):
+            res = mongoAPI.authenticateTeacher(emailId=email,
                                         password=password)
-        if(res["status"]):
-            session["isTeacher"] = True
-            session["id"] = str(res["id"])
-            return render_template("login.html", error="logged in Successfully")
+            if(res["status"]):
+                session["isTeacher"] = True
+                session["id"] = str(res["id"])
+                return render_template("login.html", error="logged in Successfully")
+            else:
+                return render_template("login.html", error="Wrong email or password")
         else:
-            return render_template("login.html", error="Wrong email or password")
+            res = mongoAPI.authenticateStudent(emailId=email,
+                                        password=password)
+            if(res["status"]):
+                session["isTeacher"] = False
+                session["id"] = str(res["id"])
+                return render_template("login.html", error="logged in Successfully")
+            else:
+                return render_template("login.html", error="Wrong email or password")
     else:
         return render_template("login.html")
-    # session["isTeacher"] = True
-    # session["id"] = "60ced16a28ee6a510070bd86"
-    # return "true"
 
-@app.route('/loginStudent', methods = ['POST', 'GET'])
-def loginStudent():
+@app.route('/registerStudent', methods = ['POST', 'GET'])
+def registerStudent():
     if request.method == 'POST':
         email = request.form["email"]
-        password = request.form["pass"]
-        res = mongoAPI.authenticateStudent(emailId=email,
-                                        password=password)
-        if(res["status"]):
-            session["isTeacher"] = False
-            session["id"] = str(res["id"])
-            return render_template("login.html", error="logged in Successfully")
+        name = request.form["name"]
+        dob = request.form["dob"]
+        gender = request.form["gender"] == "male"
+        password1 = request.form["password1"]
+        password2 = request.form["password2"]
+        if( password1 == password2):
+            res = mongoAPI.addStudent(name, datetime.strptime(dob, '%Y-%m-%d'), gender,email, password1)
+            if(res[0]["status"]):
+                session["isTeacher"] = False
+                # print(res)
+                session["id"] = str(res[0]["id"])
+                return redirect(url_for('home'))
+            else:
+                return render_template("registerStudent.html", error="Email already registered")
         else:
-            return render_template("login.html", error="Wrong email or password")
+            return render_template("registerStudent.html", error="password didnt match")
     else:
-        return render_template("login.html")
-    # session["isTeacher"] = False
-    # session["id"] = "60cf3ed5c8f9ccd0ab113ac7"
-    # return "true"
+        return render_template("registerStudent.html")
+
+@app.route('/registerTeacher', methods = ['POST', 'GET'])
+def registerTeacher():
+    if request.method == 'POST':
+        email = request.form["email"]
+        name = request.form["name"]
+        dob = request.form["dob"]
+        gender = request.form["gender"] == "male"
+        graduation = request.form["graduation"] 
+        discription = request.form["discription"] 
+        password1 = request.form["password1"]
+        password2 = request.form["password2"]
+        if( password1 == password2):
+            res = mongoAPI.addTeacher(name,
+                                datetime.strptime(dob, '%Y-%m-%d'),
+                                gender, 
+                                graduation, 
+                                discription,
+                                email, 
+                                password1)
+            res = mongoAPI.addStudent(name, datetime.strptime(dob, '%Y-%m-%d'), gender,email, password1)
+            if(res[0]["status"]):
+                session["isTeacher"] = True
+                session["id"] = str(res[0]["id"])
+                return redirect(url_for('home'))
+            else:
+                return render_template("registerTeacher.html", error="Email already registered")
+        else:
+            return render_template("registerTeacher.html", 
+            error="password didnt match")
+    else:
+        return render_template("registerTeacher.html")
+
+@app.route('/addCourse', methods = ['POST', 'GET'])
+def addCourse():
+    if request.method == 'POST':
+        if "isTeacher" in session and session["isTeacher"]:
+            cname = request.form["name"]
+            discription = request.form["discription"]
+            duration = request.form["duration"]
+            tags = []
+            tags.append(request.form["tag1"])
+            tags.append(request.form["tag2"])
+            tags.append(request.form["tag3"])
+            res = mongoAPI.addCourse(session["id"], cname,discription, duration, tags)
+            return redirect(url_for('courseDetails', courseId = res[0]["ObjectId"]))
+        else:
+            return redirect(url_for('login'))
+    else:
+        if "isTeacher" in session and session["isTeacher"]:
+            lines = []
+            with open('./templates/tags.txt') as f:
+                lines = f.read().splitlines()
+            return render_template("createCourse.html", tags=lines)
+        else:
+            return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
     session.pop("isTeacher")
     session.pop("id")
-    return " "
+    return redirect(url_for('home'))
 
 @app.route('/addNotes', methods = ['POST'])
 def addNotes():
@@ -89,7 +157,7 @@ def addNotes():
             if mongoAPI.checkIfTeacherTeachesCourse(session["id"], courseId):
                 mongoAPI.addNotes(request.form['ass-titl'], request.form['ass-body'], courseId)
             return redirect(url_for('courseDetails', courseId = courseId))
-        return redirect(url_for('loginTeacher', ))
+        return redirect(url_for('login'))
 
 @app.route('/addAssignment', methods = ['POST'])
 def addAssignment():
@@ -103,7 +171,20 @@ def addAssignment():
                                         courseId,
                                         date)
             return redirect(url_for('courseDetails', courseId = courseId))
-        return redirect(url_for('loginTeacher', ))
+        return redirect(url_for('login'))
+
+@app.route('/enrollToCourse', methods = ['POST'])
+def enrollToCourse():
+    if request.method == 'POST':
+        if "isTeacher" in session:
+            courseId = request.form['courseId']
+            if(mongoAPI.checkIfStudentExists(session["id"])):
+                mongoAPI.addStudentToCourse(courseId, session["id"])
+            return redirect(url_for('courseDetails', courseId = courseId))
+        return redirect(url_for('login', ))
+
+
+
 
 @app.route('/ansToAssignment', methods = ['POST'])
 def ansToAssignment():
@@ -128,10 +209,18 @@ def assignmentDetails(assignmentId):
                                     details = details[0], 
                                     students= students)
         elif mongoAPI.checkIfStudentInCourse(courseId=courseId, studentId=session["id"]):
+            res = mongoAPI.getAnswer(session["id"], assignmentId)
             details = mongoAPI.getAssignmentInfoForStudent(assignmentId)
-            return render_template("assignmentStudent.html",
-                                    details = details[0])
+            if(res):
+                return render_template("assignmentStudent.html",
+                                        details = details[0],
+                                        answers = res[0])
+            else:
+                return render_template("assignmentStudent.html",
+                                        details = details[0],
+                                        )
     return "PERMISSION DENIED"
+
 
 
 

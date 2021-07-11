@@ -26,12 +26,22 @@
                 <hr>
         </div>
         <p>{{ details["discription"]}}</p>
-        <form action="{{url_for('ansToAssignment')}}" method="post">
-            <input type="hidden" name="assignmentId" value="{{ details["_id"] }}">
-            <textarea name="ans" id="" cols="30" rows="5" placeholder="Enter the answer here..." required></textarea><br>
-            <input type="file" name="ansFile" id=""><br>
-            <input type="submit" value="Submit">
-        </form>
+        {% if answers %}
+            <hr>
+            <div>
+                <span>Submitted Date{{ answers["answers"][0]["submitedDate"].strftime('%d/%m/%Y') }}</span>
+                <p>
+                    {{answers["answers"][0]["answer"]}}
+                </p>
+            </div>
+        {% else %}
+            <form action="{{url_for('ansToAssignment')}}" method="post">
+                <input type="hidden" name="assignmentId" value="{{ details["_id"] }}">
+                <textarea name="ans" id="" cols="30" rows="5" placeholder="Enter the answer here..." required></textarea><br>
+                <input type="file" name="ansFile" id=""><br>
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
     </div>
 </body>
 

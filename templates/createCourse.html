@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}
+<title>courseKart</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/register.css') }}"> {% endblock %} {% block content %}
+<div class="profile-block">
+    <h1>Create Course</h1>
+    <hr/>
+    <form method="POST" action="{{url_for('addCourse') }}" enctype="multipart/form-data">
+        <div class="profile-items">
+            <p>Course Name</p>
+            <input type="text" name="name" id="full-title" value="" required>
+            <p>Duration
+            </p>
+            <input type="number" name="duration" id="full-title" value="" required> Months
+            <p>Discription</p>
+            <textarea name="discription" rows="10" cols="30" placeholder="introduction to the course"></textarea>
+            <p>Tag #1</p>
+            <select name="tag1" id="tag1" required>
+                {% for k in tags %}
+                    <option value="{{k}}" >{{k}}</option>
+                {% endfor %}
+            </select>
+            <p>Tag #2</p>
+            <select name="tag2" id="tag2" required>
+                {% for k in tags %}
+                    <option value="{{k}}" >{{k}}</option>
+                {% endfor %}
+            </select>
+            <p>Tag #3</p>
+            <select name="tag3" id="tag3" required>
+                {% for k in tags %}
+                    <option value="{{k}}" >{{k}}</option>
+                {% endfor %}
+            </select>
+            <div class="btns">
+                <input type="submit" value="Submit">
+            </div>
+
+        </div>
+    </form>
+</div>
+{% endblock %}
