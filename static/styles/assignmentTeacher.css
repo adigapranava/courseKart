@@ -126,6 +126,10 @@ span {
     font-size: 17px;
 }
 
+.grn {
+    background-color: #36f07a;
+}
+
 .answers {
     padding: 10px;
 }

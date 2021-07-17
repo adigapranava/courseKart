@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Assignments</title>
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
     <!-- EXTERNAL CSS -->
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/assignmentStudent.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static',filename='images/logoDark.png') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -27,6 +28,10 @@
         </div>
         <p>{{ details["discription"]}}</p>
         {% if answers %}
+            {% if answers["answers"][0]["teachersComment"] %}
+                <h4>teachersComment</h4>
+                <div style="color: #ddd; background-color: #333; padding: 10px; margin-top: 10px">{{ answers["answers"][0]["teachersComment"] }} </div>
+            {% endif %}
             <hr>
             <div>
                 <span>Submitted Date{{ answers["answers"][0]["submitedDate"].strftime('%d/%m/%Y') }}</span>

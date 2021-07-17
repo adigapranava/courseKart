@@ -8,6 +8,25 @@
     font-family: 'Noto Sans JP', sans-serif;
 }
 
+::-webkit-scrollbar {
+    cursor: pointer;
+    width: 8px;
+}
+
+ ::-webkit-scrollbar-track {
+    background-color: rgb(151, 151, 151);
+    border-radius: 50px;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: #353535;
+    border-radius: 50px;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: rgb(75, 75, 75);
+}
+
 body {
     margin: 0;
     padding: 0;

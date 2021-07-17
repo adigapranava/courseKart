@@ -1,11 +1,40 @@
+.search-bar form {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ddd;
+    float: left;
+    font-size: 30px;
+    border: rgb(63, 61, 61) 1px solid;
+    color: #333;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+label i {
+    color: #333;
+}
+
+.search-bar input,
+.search-bar input:focus {
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    border: none;
+    background: none;
+}
+
 .rigistered-courses {
     display: inline-block;
+    position: relative;
+    text-align: center;
     width: 98vw;
     padding: 2rem;
 }
 
 .course {
     display: inline-block;
+    text-align: left;
     background-color: rgb(56, 44, 50);
     color: #e0e0e0;
     padding: 1rem;

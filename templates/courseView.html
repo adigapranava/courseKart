@@ -48,7 +48,7 @@
                     </p>
                     <p>
                         <Strong>Some popular course:</Strong> {% for otherCourse in otherCourses %}
-                        <a style="color: #9dafff;" href="{{ url_for('courseDetails' ,courseId=otherCourse['_id']) }}">{{ otherCourse["courseName"]}}</a> , {% endfor %}
+                        <a style="color: blue;" href="{{ url_for('courseDetails' ,courseId=otherCourse['_id']) }}">{{ otherCourse["courseName"]}}</a> , {% endfor %}
                     </p>
                 </div>
             </div>

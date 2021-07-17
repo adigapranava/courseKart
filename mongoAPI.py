@@ -327,6 +327,14 @@ def getAnswer(answeredBy, assId):
     else:
         return False
 
+def gradeAssignment(assId, ansPos, comment):
+    results = collAssignment.update({
+        "_id": ObjectId(assId),
+        },{
+            "$set": {"answers."+str(ansPos)+".teachersComment": comment}
+        })
+    return list(results)
+
 def checkIfAssignmentExit(courseId, assId):
     results = collCourse.find({
         "_id": ObjectId(courseId),
@@ -335,6 +343,7 @@ def checkIfAssignmentExit(courseId, assId):
 
     course = list(results)
     return len(course) > 0
+
 
 
 """
@@ -374,8 +383,6 @@ def getRecomendedCourse(studentId):
     for course in coursesWithTags:
         allCourses.append(course["_id"])
         allCoursesTags += course["tags"]
-
-    # print("allcourses", allCourses)
     
     # ordering the most common tags
     tags = dict()
@@ -385,6 +392,8 @@ def getRecomendedCourse(studentId):
     tags = list(tags.keys())
 
     results = getAllCoursesHavingTags(tags, allCourses)
+    if not results:
+        results = getAllCourseSmallInfo()[:10]
     return results
 
 def getRelatedCourse(courseId):
@@ -527,7 +536,7 @@ def getAllCourseWithTeacher():
             "numberOfStudents": -1}}
     ])
 
-    return results
+    return list(results)
 
 # returns all courses small details with teacher
 def getAllCourseSmallInfo(exceptCourses=[]):
@@ -582,3 +591,6 @@ if __name__=="__main__":
     # print(ansToAssignment("60cf3ed5c8f9ccd0ab113ac7","60d01576780e9ccb770b1200","60d72ed33e42f33bbefbc112", "Test Ans"))
     # print(getAssignmentInfoForStudent("60d72ed33e42f33bbefbc112"))
     # getAnswer("60eacce25bb948228b253809", "60eacd395bb948228b25380a")
+    # print(getRecomendedCourse("60f26bf1fe9fc2ad5d5bc627"))
+    # print(getAllCourseOfStudent("60cf3ed5c8f9ccd0ab113ac7"))
+    # print(gradeAssignment("60d36dbf7e4d0e6d13652e35", 10, "good"))

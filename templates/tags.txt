@@ -10,3 +10,24 @@ leadership
 maths
 linearAlgebra
 science
+codings
+commerse
+history
+logic
+compitition
+english
+language
+contentCreation
+creativity
+blog
+photography
+music
+video
+edit
+photo
+travell
+life
+motivation
+enjoy
+stock market
+bid coin

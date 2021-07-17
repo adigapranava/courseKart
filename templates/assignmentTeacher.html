@@ -40,14 +40,25 @@
                 <h2>Submited By</h2>
                 {% set k = namespace(value=0) %}
                 {% for  submitedStudent in details["studentInfo"] %}
-                    <a href="#ass{{k.value}}" class="student">
-                        {% if submitedStudent["gender"] %}
-                            <img src="{{ url_for('static',filename='images/boy.png') }}" alt="" srcset="">
+                        {% if details["answers"][k.value]["teachersComment"] %}
+                            <a href="#ass{{k.value}}" class="student grn">
+                                {% if submitedStudent["gender"] %}
+                                    <img src="{{ url_for('static',filename='images/boy.png') }}" alt="" srcset="">
+                                {% else %}
+                                    <img src="{{ url_for('static',filename='images/girl.png') }}" alt="" srcset="">
+                                {% endif %}
+                                <h5>{{ submitedStudent["name"]}}</h5>
+                            </a>
                         {% else %}
-                            <img src="{{ url_for('static',filename='images/girl.png') }}" alt="" srcset="">
+                            <a href="#ass{{k.value}}" class="student">
+                                {% if submitedStudent["gender"] %}
+                                    <img src="{{ url_for('static',filename='images/boy.png') }}" alt="" srcset="">
+                                {% else %}
+                                    <img src="{{ url_for('static',filename='images/girl.png') }}" alt="" srcset="">
+                                {% endif %}
+                                <h5>{{ submitedStudent["name"]}}</h5>
+                            </a>
                         {% endif %}
-                        <h5>{{ submitedStudent["name"]}}</h5>
-                    </a>
                     {% set k.value = k.value + 1 %}
                 {% endfor %}
             </div>
@@ -74,10 +85,15 @@
                         <p>
                             {{answer["answer"]}}
                         </p>
-                        <form action="" method="post">
-                            <input type="hidden" name="answer-no" value="">
-                            <input type="text" placeholder="Grade the assignment" required>
-                            <input type="submit" value="Submit">
+                        <form action="{{url_for('addCommentToAns') }}" method="post">
+                            <input type="hidden" name="ansId" value="{{k.value}}">
+                            <input type="hidden" name="assId" value="{{assignmentId}}">
+                            {% if answer["teachersComment"] %}
+                                <div style="color: #ddd; background-color: #333; padding: 10px; margin-top: 10px">{{ answer["teachersComment"] }} </div>
+                            {% else %}
+                                <input type="text" placeholder="Grade the assignment" required name="comment">
+                                <input type="submit" value="Submit">
+                            {% endif %}
                         </form>
                     </div>
                     {% set k.value = k.value + 1 %}

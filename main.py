@@ -19,21 +19,21 @@ app.permanent_session_lifetime = timedelta(days=5)
 
 @app.route('/')
 def home():
-   # todos 
-   #if logged in as teacher
-        #send his course
-    #else if logged in as student 
-        #send all his registered courses
-    # else send all the course ordered by no of enrolments
     if "isTeacher" in session:
-        courses = mongoAPI.getAllCourseSmallInfo()
-        # print(courses[0]["teacherId"][0]["teacherName"])
-        return render_template("mainPage.html", courses = courses)
-        # return "logged in"+ session["id"]
+        if session["isTeacher"]:
+            courses = mongoAPI.getAllCoursesOfTeacher(session["id"])
+            return render_template("mainPage.html", 
+                                    courses = courses)
+        else:
+            courses = mongoAPI.getAllCourseOfStudent(session["id"])
+            recomendedCourse = mongoAPI.getRecomendedCourse(session["id"])
+            return render_template("mainPage.html", 
+                                    courses = courses, 
+                                    recomendedCourses = recomendedCourse)
     else:
-        courses = mongoAPI.getAllCourseSmallInfo()
-        # print(courses[0]["teacherId"][0]["teacherName"])
-        return render_template("mainPage.html", courses = courses)
+        recomendedCourse = mongoAPI.getAllCourseSmallInfo()
+        return render_template("mainPage.html", 
+                                recomendedCourses = recomendedCourse)
     return "true"
 
 
@@ -58,7 +58,7 @@ def login():
             if(res["status"]):
                 session["isTeacher"] = False
                 session["id"] = str(res["id"])
-                return render_template("login.html", error="logged in Successfully")
+                return redirect(url_for("home"))
             else:
                 return render_template("login.html", error="Wrong email or password")
     else:
@@ -81,9 +81,11 @@ def registerStudent():
                 session["id"] = str(res[0]["id"])
                 return redirect(url_for('home'))
             else:
-                return render_template("registerStudent.html", error="Email already registered")
+                stu = {"name":name,"dob": dob,"gender":gender,"password": password1, "email":""}
+                return render_template("registerStudent.html", error="Email already registered", student = stu)
         else:
-            return render_template("registerStudent.html", error="password didnt match")
+            stu = {"name":name,"dob": dob,"gender":gender,"password": "", "email":email}
+            return render_template("registerStudent.html", error="password didnt match", student = stu)
     else:
         return render_template("registerStudent.html")
 
@@ -118,6 +120,19 @@ def registerTeacher():
             error="password didnt match")
     else:
         return render_template("registerTeacher.html")
+
+@app.route('/addCommentToAns', methods = ['POST', 'GET'])
+def addCommentToAns():
+    if request.method == 'POST':
+        if "isTeacher" in session and session["isTeacher"]:
+            assId = request.form["assId"]
+            ansId = request.form["ansId"]
+            comment = request.form["comment"]
+            courseId = mongoAPI.getCourseIdOfAssignment(assignmentId=assId)
+            if mongoAPI.checkIfTeacherTeachesCourse(session["id"], courseId):
+                mongoAPI.gradeAssignment(assId,ansId, comment)
+                return redirect(url_for('assignmentDetails', assignmentId=assId))
+    return "Forbidden"
 
 @app.route('/addCourse', methods = ['POST', 'GET'])
 def addCourse():
@@ -207,7 +222,8 @@ def assignmentDetails(assignmentId):
             details = mongoAPI.getAssignmentInfoForTeacher(assignmentId)
             return render_template("assignmentTeacher.html",
                                     details = details[0], 
-                                    students= students)
+                                    students= students,
+                                    assignmentId = assignmentId)
         elif mongoAPI.checkIfStudentInCourse(courseId=courseId, studentId=session["id"]):
             res = mongoAPI.getAnswer(session["id"], assignmentId)
             details = mongoAPI.getAssignmentInfoForStudent(assignmentId)

@@ -1,28 +1,69 @@
 {% extends "base.html" %}
 {% block title %}
     <title>courseKart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/mainpage.css') }}">
 {% endblock %}
 
 {% block content %}
-    <div class="rigistered-courses">
-        {% if courses :%} {% for course in courses: %}
-        <a href="{{ url_for('courseDetails' ,courseId=course['_id']) }}" class="course">
-            <div class="">
-                <div class="course-detl">
-                    {{ course["courseName"] }}
-                </div>
-                <div class="bottom">
-                    <hr>
-                    <div class="teacher">
-                        {{ course["teacherId"][0]["teacherName"] }}
-                    </div>
-                </div>
-            </div>
-        </a>
-        {% endfor %} {% else %}
-        <h1>No CoursesFound </h1>
-        {% endif %}
-
+    <!-- <div class="search-bar">
+        <form action="" id="search-form">
+            <label for="search"><i class="fa fa-search"></i></label>
+            <input type="text" id="search" placeholder="Course Name">
+        </form>
     </div>
+    <div class="rigistered-courses" id="Search Course">
+       
+    </div>-->
+
+    {% if courses :%} 
+    <hr>
+    <div class="rigistered-courses">
+        <h3 style="color:#ddd; ">Your Courses</h3>
+            {% for course in courses: %}
+                <a href="{{ url_for('courseDetails' ,courseId=course['_id']) }}" class="course">
+                    <div class="">
+                        <div class="course-detl">
+                            {{ course["courseName"] }}
+                        </div>
+                        <div class="bottom">
+                            <hr>
+                            <div class="teacher">
+                                {{ course["teacherId"][0]["teacherName"] }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %} 
+    </div>
+    <hr>
+    {% endif %}
+
+    {% if recomendedCourses :%} 
+        <div class="rigistered-courses">
+            <h3 style="color:#ddd; ">Recomended Courses</h3>
+            {% for course in recomendedCourses: %}
+                <a href="{{ url_for('courseDetails' ,courseId=course['_id']) }}" class="course">
+                    <div class="">
+                        <div class="course-detl">
+                            {{ course["courseName"] }}
+                        </div>
+                        <div class="bottom">
+                            <hr>
+                            <div class="teacher">
+                                {{ course["teacherId"][0]["teacherName"] }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %} 
+        </div>
+    {% endif %}
+    {% if session["isTeacher"] %}
+        <a style="position:fixed;bottom:10px; right:20px; background-color: #ddd; padding: 10px; border-radius: 50%" href="{{ url_for('addCourse') }}">
+            <i class="fa fa-plus-square-o" style="font-size:40px; color: #333;"></i>
+        </a>
+    {% endif %}
+
+    <script src="{{ url_for('static',filename='scripts/mainPage.js') }}"></script>
 {% endblock %}
