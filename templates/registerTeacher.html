@@ -11,9 +11,9 @@
         <form method="POST" action="{{url_for('registerTeacher') }}" enctype="multipart/form-data">
             <div class="profile-items">
                 <p>Full Name</p>
-                <input type="text" name="name" id="full-title" value="" required>
+                <input type="text" name="name" id="full-title" value="{{teacher["name"]}}" required>
                 <p>DOB</p>
-                <input type="date" name="dob" id="dob" value="" required>
+                <input type="date" name="dob" id="dob" value="{{teacher["dob"]}}" required>
                 <p>Gender</p>
                 <div style="display: flex">
                     <input type="radio" name="gender" id="who1" value="male" required>
@@ -22,15 +22,17 @@
                     <label for="who2" style="position: relative;right: 160px; font-size:20px;">Female</label>
                 </div>
                 <p>Email</p>
-                <input type="text" name="email" value="" id="email" required>
+                <input type="text" name="email" value="{{teacher["email"]}}" id="email" required>
                 <p>Graduation</p>
-                <input type="text" name="graduation" value="" id="email" required>
+                <input type="text" name="graduation" value="{{teacher["graduation"]}}" id="email" required>
                 <p>Discription</p>
-                <textarea name="discription" rows="10" cols="30" placeholder="introduce yourself"></textarea>
+                <textarea name="discription" rows="10" cols="30" placeholder="introduce yourself">
+                    {{teacher["discription"]}}
+                </textarea>
                 <p>Password</p>
-                <input type="password" name="password1" id="phoneno" value="" required>
+                <input type="password" name="password1" id="phoneno" value="{{teacher["password"]}}" required>
                 <p>Confirm Password</p>
-                <input type="password" name="password2" id="phoneno" value="" required>
+                <input type="password" name="password2" id="phoneno" value="{{teacher["password"]}}" required>
                 <br>
                 <h5 style="color: rgb(252, 110, 15);font-size: 18px;" id="error_text">{{error}}</h5>
                 <br>

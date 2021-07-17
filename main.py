@@ -16,7 +16,6 @@ app.secret_key="secret key"
 
 app.permanent_session_lifetime = timedelta(days=5)
 
-
 @app.route('/')
 def home():
     if "isTeacher" in session:
@@ -36,7 +35,6 @@ def home():
                                 recomendedCourses = recomendedCourse)
     return "true"
 
-
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -45,13 +43,14 @@ def login():
         who = request.form["who"]
         if(who == "teacher" ):
             res = mongoAPI.authenticateTeacher(emailId=email,
-                                        password=password)
+                                            password=password)
             if(res["status"]):
                 session["isTeacher"] = True
                 session["id"] = str(res["id"])
-                return render_template("login.html", error="logged in Successfully")
+                return redirect(url_for('home'))
             else:
-                return render_template("login.html", error="Wrong email or password")
+                return render_template("login.html", 
+                                        error="Wrong email or password")
         else:
             res = mongoAPI.authenticateStudent(emailId=email,
                                         password=password)
@@ -60,7 +59,8 @@ def login():
                 session["id"] = str(res["id"])
                 return redirect(url_for("home"))
             else:
-                return render_template("login.html", error="Wrong email or password")
+                return render_template("login.html", 
+                                        error="Wrong email or password")
     else:
         return render_template("login.html")
 
@@ -82,12 +82,16 @@ def registerStudent():
                 return redirect(url_for('home'))
             else:
                 stu = {"name":name,"dob": dob,"gender":gender,"password": password1, "email":""}
-                return render_template("registerStudent.html", error="Email already registered", student = stu)
+                return render_template("registerStudent.html", 
+                                        error="Email already registered", 
+                                        student = stu)
         else:
             stu = {"name":name,"dob": dob,"gender":gender,"password": "", "email":email}
-            return render_template("registerStudent.html", error="password didnt match", student = stu)
+            return render_template("registerStudent.html", 
+                                    error="password didnt match", 
+                                    student = stu)
     else:
-        return render_template("registerStudent.html")
+        return render_template("registerStudent.html", student = {})
 
 @app.route('/registerTeacher', methods = ['POST', 'GET'])
 def registerTeacher():
@@ -102,24 +106,41 @@ def registerTeacher():
         password2 = request.form["password2"]
         if( password1 == password2):
             res = mongoAPI.addTeacher(name,
-                                datetime.strptime(dob, '%Y-%m-%d'),
-                                gender, 
-                                graduation, 
-                                discription,
-                                email, 
-                                password1)
-            res = mongoAPI.addStudent(name, datetime.strptime(dob, '%Y-%m-%d'), gender,email, password1)
+                                    datetime.strptime(dob, '%Y-%m-%d'),
+                                    gender, 
+                                    graduation, 
+                                    discription,
+                                    email, 
+                                    password1)
+
             if(res[0]["status"]):
                 session["isTeacher"] = True
                 session["id"] = str(res[0]["id"])
                 return redirect(url_for('home'))
             else:
-                return render_template("registerTeacher.html", error="Email already registered")
+                teacher = {"name":name,
+                            "dob": dob,
+                            "gender":gender,
+                            "password": password1,
+                            "email":"", 
+                            "graduation": graduation,
+                            "discription": discription}
+                return render_template("registerTeacher.html", 
+                                        error="Email already registered",
+                                        teacher = teacher)
         else:
+            teacher = {"name":name,
+                        "dob": dob,
+                        "gender":gender,
+                        "password": "",
+                        "email":email, 
+                        "graduation": graduation,
+                        "discription": discription}
             return render_template("registerTeacher.html", 
-            error="password didnt match")
+                                    error="password didnt match",
+                                    teacher = teacher)
     else:
-        return render_template("registerTeacher.html")
+        return render_template("registerTeacher.html", teacher={})
 
 @app.route('/addCommentToAns', methods = ['POST', 'GET'])
 def addCommentToAns():
@@ -146,6 +167,7 @@ def addCourse():
             tags.append(request.form["tag2"])
             tags.append(request.form["tag3"])
             res = mongoAPI.addCourse(session["id"], cname,discription, duration, tags)
+            print(res)
             return redirect(url_for('courseDetails', courseId = res[0]["ObjectId"]))
         else:
             return redirect(url_for('login'))
@@ -198,9 +220,6 @@ def enrollToCourse():
             return redirect(url_for('courseDetails', courseId = courseId))
         return redirect(url_for('login', ))
 
-
-
-
 @app.route('/ansToAssignment', methods = ['POST'])
 def ansToAssignment():
     if request.method == 'POST':
@@ -236,9 +255,6 @@ def assignmentDetails(assignmentId):
                                         details = details[0],
                                         )
     return "PERMISSION DENIED"
-
-
-
 
 @app.route('/course/<string:courseId>')
 def courseDetails(courseId):
