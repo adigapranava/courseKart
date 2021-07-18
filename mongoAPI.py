@@ -5,9 +5,10 @@ from datetime import datetime, date
 from bson.objectid import ObjectId
 import uuid
 import json
+import os
 
 
-client=MongoClient('mongodb://127.0.0.1:27017')
+client=MongoClient(os.environ['mongoURL'])
 db = client["courseManagementsDatabase"]
 collTeacher = db["teacher"]
 collCourse = db["course"]
